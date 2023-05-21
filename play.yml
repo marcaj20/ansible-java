@@ -1,0 +1,52 @@
+---
+  - hosts: devserver
+   become: yes
+   ignore_errors: yes
+   vars:
+     pkg_name: httpd
+     username: Marc
+   tasks:
+     - name: Creating user
+       user:
+         name: "{{ username }}"
+         comment: Marc Admin
+         shell: /bin/bash
+           #when: ansible_os_family == "Debian"
+     - name: create file
+       file:
+         path: /tmp/ansible.txt
+         state: touch
+         mode: '0600'
+       register: output
+     - name: read the output
+       debug:
+        msg: "hello from from ansible this is running on {{ ansible_os_family }}"
+     - name: Create directory
+       file:
+         path: /tmp/dir
+         state: directory
+         mode: '0777'
+       tags:
+        _app1
+        -c1
+     - name: create a file
+       shell: cat /etc/passwd | grep Marc
+     - name: install apache
+       yum:
+         name: "{{ pkg_name }}"
+         state: present 
+
+     - name: install finger
+       package:
+        name: "{{ item }}"
+        state: present
+       with_items:
+         - wget
+         - samba
+         - java-11*
+         - finger
+         
+
+           
+
+

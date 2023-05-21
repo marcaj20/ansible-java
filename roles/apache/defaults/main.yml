@@ -1,0 +1,8 @@
+---
+# defaults file for apache
+- name: restart apache
+  service:
+   name: httpd
+   state: present
+   role:
+   - apache
